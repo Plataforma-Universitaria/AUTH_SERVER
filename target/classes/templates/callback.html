@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Autenticação Concluída</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100">
+<div class="flex flex-col justify-center items-center min-h-screen px-6 py-8">
+    <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        
+        <h1 class="text-2xl font-bold text-gray-900 mb-4">Autenticação Concluída</h1>
+        
+        <p class="text-gray-600 mb-6">Você foi autenticado com sucesso. Pode retornar ao Assistente para continuar.</p>
+        
+        <div class="bg-gray-100 p-4 rounded-md mb-6">
+            <p class="text-sm text-gray-500">Token JWT gerado:</p>
+            <p class="text-xs text-gray-700 break-all mt-2" th:text="${jwt}">JWT_TOKEN</p>
+        </div>
+        
+        <p class="text-sm text-gray-500">Esta janela pode ser fechada.</p>
+    </div>
+</div>
+</body>
+</html>
