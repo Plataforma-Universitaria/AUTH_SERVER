@@ -31,7 +31,7 @@ public class InstitutionService {
                     .collectList()
                     .block();
         } catch (Exception e) {
-            e.printStackTrace(); // ou log com SLF4J
+            e.printStackTrace();
             return Collections.emptyList();
         }
     }
