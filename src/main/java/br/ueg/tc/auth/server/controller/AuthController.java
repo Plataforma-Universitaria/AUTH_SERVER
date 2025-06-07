@@ -2,7 +2,7 @@ package br.ueg.tc.auth.server.controller;
 
 import br.ueg.tc.auth.server.dto.LoginRequestDTO;
 import br.ueg.tc.auth.server.dto.PlatformAuthResponseDTO;
-import br.ueg.tc.auth.server.security.JwtService;
+import br.ueg.tc.auth.server.service.JwtService;
 import br.ueg.tc.auth.server.service.PlatformIntegrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package br.ueg.tc.auth.server.security;
+package br.ueg.tc.auth.server.service;
 
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
@@ -19,19 +19,17 @@ public class JwtService {
     @Value("${jwt.private-key}")
     private String privateKeyRaw;
 
-    @Value("${jwt.public-key}")
-    private String publicKeyRaw;
+    @Value("jwt.issuer")
+    private String issuer;
 
     @Value("${jwt.expiration}")
     private long expirationInSeconds;
 
     private PrivateKey privateKey;
-    private PublicKey publicKey;
 
     @PostConstruct
     public void init() throws Exception {
         this.privateKey = loadPrivateKey(privateKeyRaw);
-        this.publicKey = loadPublicKey(publicKeyRaw);
     }
 
     public String generateToken(String clientId) {
@@ -41,6 +39,7 @@ public class JwtService {
         return Jwts.builder()
                 .subject(clientId)
                 .issuedAt(now)
+                .issuer(issuer)
                 .expiration(expiry)
                 .signWith(privateKey)
                 .compact();

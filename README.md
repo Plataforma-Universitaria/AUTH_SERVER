@@ -3,13 +3,14 @@
 Este projeto implementa um servidor de autenticação que integra um bot do Assistente com uma plataforma de autenticação institucional, seguindo o fluxo:
 
 1. Usuário acessa o bot Assistente
-2. Bot envia um link para autenticação
+2. Bot envia um link para autenticação com o id do chat
 3. Usuário acessa o link que abre a interface de login
 4. Usuário seleciona instituição, persona e insere credenciais
 5. AuthServer envia as credenciais para a plataforma principal
 6. Plataforma autentica com a instituição e retorna um UUID
-7. AuthServer gera um JWT contendo o UUID
-8. AuthServer redireciona de volta para o bot com o JWT
+7. AuthServer gera um JWT contendo o UUID e o vincula ao id do chat
+8. AuthServer redireciona para a tela de confirmação
+9. AuthServer disponibiliza o Endpoint para que o Bot busque o JWT criado através do id do chat
 
 ## Tecnologias Utilizadas
 
