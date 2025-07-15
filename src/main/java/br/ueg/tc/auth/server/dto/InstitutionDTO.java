@@ -13,5 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class InstitutionDTO {
     private String shortName;
-    private List<String> personas;
+    private String longName;
+    private List<LoginDataDTO> loginData;
 }
