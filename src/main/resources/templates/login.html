@@ -1,44 +1,38 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<style>
-    .password-container {
-        position: relative;
-    }
-
-    #password {
-        padding-right: 30px;
-    }
-
-    .toggle-password {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-    }
-
-    .toggle-password img {
-        width: 20px;
-        height: 20px;
-    }
-
-    .toggle-password:hover img {
-        box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
-        border-radius: 85%;
-    }
-
-    .toggle-password.active img {
-        border-radius: 50%;
-        background-color: rgba(79, 70, 229, 0.4);
-    }
-</style>
-
 <head>
     <title>Login</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .password-container {
+            position: relative;
+        }
+        #password {
+            padding-right: 30px;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .toggle-password img {
+            width: 20px;
+            height: 20px;
+        }
+        .toggle-password:hover img {
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+            border-radius: 85%;
+        }
+        .toggle-password.active img {
+            border-radius: 50%;
+            background-color: rgba(79, 70, 229, 0.4);
+        }
+    </style>
 </head>
 <body class="bg-slate-100">
 <div class="flex flex-col justify-center lg:px-8 min-h-full px-6 py-8">
@@ -56,7 +50,7 @@
                 <p>Credenciais incorretas</p>
             </div>
 
-            <div >
+            <div>
                 <label class="block text-sm font-bold leading-6 text-gray-900" for="institutionName">Instituição</label>
                 <div class="mt-1">
                     <select id="institutionName" name="institutionName" onchange="onInstitutionChange()"
@@ -67,7 +61,7 @@
                 </div>
             </div>
 
-            <div>
+            <div id="persona-container" style="display: none;">
                 <label class="block text-sm font-bold leading-6 text-gray-900" for="persona">Função</label>
                 <div class="mt-1">
                     <select id="persona" name="persona" onchange="onPersonaChange()"
@@ -85,8 +79,8 @@
                         <input class="ring-1 block w-full rounded-md py-1.5 h-10 text-gray-900 shadow-sm border-0 ring-inset
                     ring-gray-300 px-3 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600
                     sm:text-sm sm:leading-6"
-                               id="username" name="username" type="text" placeholder="Login" required="required" maxlength="11"
-                               oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"  >
+                               id="username" name="username" type="text" placeholder="Login" maxlength="11"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');">
                     </div>
                 </div>
 
@@ -96,16 +90,15 @@
                         <input class="ring-1 block w-full rounded-md h-10 py-1.5 text-gray-900 shadow-sm border-0 ring-inset
                          ring-gray-300 px-3 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600
                          sm:text-sm sm:leading-6"
-                               id="password" name="password" type="password" placeholder="Senha" required="required">
+                               id="password" name="password" type="password" placeholder="Senha">
                         <span class="toggle-password" onclick="togglePassword()">
-                <img th:src="@{/images/olho.png}" alt="Mostrar Senha" id="toggle-icon">
-            </span>
+                            <img th:src="@{/images/olho.png}" alt="Mostrar Senha" id="toggle-icon">
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <!-- Campo oculto para o assistenteId -->
-            <input type="hidden" id="assistenteId" name="assistenteId" th:value="${assistenteId}" />
+            <input type="hidden" id="assistenteId" name="assistenteId" th:value="${assistenteId}"/>
 
             <div>
                 <input class="bg-blue-800 px-3 py-1.5 text-sm mt-8 font-semibold leading-6 text-white flex w-full
@@ -119,46 +112,11 @@
 </div>
 </body>
 
-<script th:inline="javascript">
-    function cond(select) {
-        let apiUrl = /*[[@{/api/salutation-phrase/}]]*/ '';
-        const personaSelected = document.getElementById("persona").value;
-
-        if (select && personaSelected) {
-            apiUrl = apiUrl.concat(select.value.toString().toUpperCase() + "/" + personaSelected.toString().toUpperCase());
-
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(fields => {
-                    if (fields.status === 200) {
-                        document.getElementById("text-institution").innerText = fields.salutationPhrase;
-                        document.getElementById("password").placeholder = fields.passwordFieldName;
-                        document.getElementById("password-label").innerText = fields.passwordFieldName;
-                        document.getElementById("username").placeholder = fields.usernameFieldName;
-                        document.getElementById("username-label").innerText = fields.usernameFieldName;
-                        document.getElementById("login-fields").style.display = "block";
-                    } else {
-                        document.getElementById("login-fields").style.display = "none";
-                    }
-                })
-                .catch(error => {
-                    document.getElementById("text-institution").innerText = error.message;
-                    document.getElementById("login-fields").style.display = "none";
-                });
-        } else {
-            document.getElementById("login-fields").style.display = "none";
-        }
-
-        document.getElementById("text-institution").innerText = "Selecione sua Instituição de Ensino";
-    }
-
-</script>
-
 <script>
     function togglePassword() {
-        var passwordField = document.getElementById("password");
-        var toggleIcon = document.getElementById("toggle-icon");
-        var togglePasswordButton = document.querySelector(".toggle-password");
+        const passwordField = document.getElementById("password");
+        const toggleIcon = document.getElementById("toggle-icon");
+        const togglePasswordButton = document.querySelector(".toggle-password");
 
         if (passwordField.type === "password") {
             passwordField.type = "text";
@@ -171,50 +129,96 @@
         }
     }
 </script>
+
 <script th:inline="javascript">
     let institutions = [];
+    const institutionSelect = document.getElementById("institutionName");
+    const personaSelect = document.getElementById("persona");
+    const personaContainer = document.getElementById("persona-container");
+    const loginFields = document.getElementById("login-fields");
+    const textInstitution = document.getElementById("text-institution");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+
+    function resetFormState() {
+        personaContainer.style.display = "none";
+        loginFields.style.display = "none";
+        usernameInput.required = false; // Garante que não seja obrigatório ao resetar
+        passwordInput.required = false;
+        personaSelect.innerHTML = '<option value="">Selecione...</option>';
+        textInstitution.innerText = "Selecione sua Instituição de Ensino";
+    }
 
     document.addEventListener("DOMContentLoaded", async function () {
-        const institutionSelect = document.getElementById("institutionName");
-        const response = await fetch(/*[[@{/api/institutions}]]*/ '');
-        institutions = await response.json();
+        try {
+            const response = await fetch(/*[[@{/api/institutions}]]*/ '');
+            if (!response.ok) throw new Error('Falha ao buscar instituições');
 
-        institutions.forEach(inst => {
-            const option = document.createElement("option");
-            option.value = inst.shortName;
-            option.textContent = inst.shortName.toUpperCase();
-            institutionSelect.appendChild(option);
-        });
-        document.getElementById("login-fields").style.display = "none";
+            institutions = await response.json();
 
+            institutions.forEach(inst => {
+                const option = document.createElement("option");
+                option.value = inst.shortName;
+                option.textContent = inst.longName || inst.shortName.toUpperCase();
+                institutionSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error(error);
+            textInstitution.innerText = "Erro ao carregar instituições.";
+        }
+        resetFormState();
     });
 
-
     function onInstitutionChange() {
-        const selectedInstitution = document.getElementById("institutionName").value;
-        const personaSelect = document.getElementById("persona");
-        const inst = institutions.find(i => i.shortName === selectedInstitution);
-        personaSelect.innerHTML = '<option value="">Selecione...</option>';
+        const selectedShortName = institutionSelect.value;
+        const inst = institutions.find(i => i.shortName === selectedShortName);
 
-        if (inst && inst.personas) {
-            inst.personas.forEach(p => {
+        resetFormState();
+
+        if (inst && inst.loginData && inst.loginData.length > 0) {
+            inst.loginData.forEach(p => {
                 const opt = document.createElement("option");
-                opt.value = p;
-                opt.textContent = p;
+                opt.value = p.persona;
+                opt.textContent = p.persona;
                 personaSelect.appendChild(opt);
             });
-
-            personaSelect.parentElement.parentElement.style.display = "block";
-        } else {
-            personaSelect.parentElement.parentElement.style.display = "none";
+            personaContainer.style.display = "block";
         }
-
-        document.getElementById("login-fields").style.display = "none";
     }
 
     function onPersonaChange() {
-        const selectedInstitution = document.getElementById("institutionName");
-        cond(selectedInstitution);
+        const selectedShortName = institutionSelect.value;
+        const selectedPersona = personaSelect.value;
+
+        loginFields.style.display = "none";
+        usernameInput.required = false;
+        passwordInput.required = false;
+
+        if (!selectedShortName || !selectedPersona) {
+            return;
+        }
+
+        const inst = institutions.find(i => i.shortName === selectedShortName);
+        const loginConfig = inst.loginData.find(p => p.persona === selectedPersona);
+
+        if (loginConfig) {
+            textInstitution.innerText = loginConfig.salutationPhrase;
+            if (loginConfig.usernameField) {
+                // Se for necessário, mostra os campos, preenche e torna obrigatório
+                document.getElementById("username-label").innerText = loginConfig.usernameField;
+                usernameInput.placeholder = loginConfig.usernameField;
+                document.getElementById("password-label").innerText = loginConfig.passwordField;
+                passwordInput.placeholder = loginConfig.passwordField;
+
+                usernameInput.required = true;
+                passwordInput.required = true;
+                loginFields.style.display = "block";
+            } else {
+                loginFields.style.display = "none";
+                usernameInput.required = false;
+                passwordInput.required = false;
+            }
+        }
     }
 </script>
 

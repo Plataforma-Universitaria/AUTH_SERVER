@@ -10,6 +10,7 @@ COPY pom.xml .
   # go-offline using the pom.xml
 RUN mvn dependency:go-offline
 
+
   # copy your other files
 COPY ./src ./src
   # compile the source code and package it in a jar file
