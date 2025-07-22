@@ -19,7 +19,7 @@ public class JwtService {
     @Value("${jwt.private-key}")
     private String privateKeyRaw;
 
-    @Value("jwt.issuer")
+    @Value("${jwt.issuer}")
     private String issuer;
 
     @Value("${jwt.expiration}")

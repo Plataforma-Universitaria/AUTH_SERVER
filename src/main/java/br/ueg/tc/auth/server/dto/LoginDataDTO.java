@@ -5,14 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InstitutionDTO {
-    private String shortName;
-    private String longName;
-    private List<LoginDataDTO> loginData;
+public class LoginDataDTO {
+    private String usernameField;
+    private String passwordField;
+    private String salutationPhrase;
+    private String persona;
 }
