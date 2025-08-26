@@ -204,13 +204,13 @@
         if (loginConfig) {
             textInstitution.innerText = loginConfig.salutationPhrase;
             if (loginConfig.usernameField) {
-                // Se for necessário, mostra os campos, preenche e torna obrigatório
                 document.getElementById("username-label").innerText = loginConfig.usernameField;
                 usernameInput.placeholder = loginConfig.usernameField;
                 document.getElementById("password-label").innerText = loginConfig.passwordField;
                 passwordInput.placeholder = loginConfig.passwordField;
 
                 usernameInput.required = true;
+
                 passwordInput.required = true;
                 loginFields.style.display = "block";
             } else {

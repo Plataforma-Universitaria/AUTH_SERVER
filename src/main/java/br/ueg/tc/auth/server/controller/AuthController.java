@@ -2,6 +2,7 @@ package br.ueg.tc.auth.server.controller;
 
 import br.ueg.tc.auth.server.dto.LoginRequestDTO;
 import br.ueg.tc.auth.server.dto.PlatformAuthResponseDTO;
+import br.ueg.tc.auth.server.dto.PlatformLogoutResponseDTO;
 import br.ueg.tc.auth.server.service.JwtService;
 import br.ueg.tc.auth.server.service.PlatformIntegrationService;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,8 @@ public class AuthController {
         } else {
             redirectAttributes.addFlashAttribute("error",
                     response != null ? response.getMessage() : "Erro de autenticação");
-            return "redirect:/?error=true";
+            String errorRedirect = "?assistenteId=" + assistenteId + "&error=true";
+            return "redirect:/" + errorRedirect;
         }
     }
 
@@ -70,6 +72,18 @@ public class AuthController {
             return ResponseEntity.ok(token);
         } else {
             return ResponseEntity.status(404).body("Token não encontrado para assistenteId: " + assistenteId);
+        }
+    }
+    @PostMapping("/logout")
+    @ResponseBody
+    public ResponseEntity<String> logout(@RequestParam String assistenteId) {
+        String token = jwtStorage.get(assistenteId);
+        PlatformLogoutResponseDTO platformLogoutResponseDTO = platformIntegrationService.logoutWithPlatform(token).block();
+        String key = jwtStorage.remove(assistenteId);
+        if (key != null) {
+            return ResponseEntity.ok(key);
+        } else {
+            return ResponseEntity.status(404).body("Não encontrado para assistenteId: " + assistenteId);
         }
     }
 }
