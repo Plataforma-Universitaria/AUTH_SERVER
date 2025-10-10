@@ -30,8 +30,11 @@ public class AuthController {
     private ConcurrentHashMap<String, String> jwtStorage = new ConcurrentHashMap<>();
 
     @GetMapping("/")
-    public String loginPage(@RequestParam(required = false) String assistenteId, Model model) {
+    public String loginPage(
+            @RequestParam(required = false) String assistenteId,
+            Model model) {
         model.addAttribute("assistenteId", assistenteId);
+
         return "login";
     }
 
