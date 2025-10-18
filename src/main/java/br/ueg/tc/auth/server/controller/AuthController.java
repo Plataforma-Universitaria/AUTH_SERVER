@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
@@ -30,8 +31,11 @@ public class AuthController {
     private ConcurrentHashMap<String, String> jwtStorage = new ConcurrentHashMap<>();
 
     @GetMapping("/")
-    public String loginPage(@RequestParam(required = false) String assistenteId, Model model) {
+    public String loginPage(
+            @RequestParam(required = false) String assistenteId,
+            Model model) {
         model.addAttribute("assistenteId", assistenteId);
+
         return "login";
     }
 
@@ -57,11 +61,18 @@ public class AuthController {
 
             return "callback";
         } else {
-            redirectAttributes.addFlashAttribute("error",
-                    response != null ? response.getMessage() : "Erro de autenticação");
-            String errorRedirect = "?assistenteId=" + assistenteId + "&error=true";
-            return "redirect:/" + errorRedirect;
+            if(Objects.nonNull(response)) {
+                redirectAttributes.addFlashAttribute("error",
+                        response.getMessage().contains("authenticate")? "Credenciais incorretas!" : response.getMessage());
+            }
+
+
+        if (assistenteId != null && !assistenteId.isEmpty()) {
+            redirectAttributes.addAttribute("assistenteId", assistenteId);
         }
+
+        return "redirect:/";
+    }
     }
 
     @GetMapping("/token")
