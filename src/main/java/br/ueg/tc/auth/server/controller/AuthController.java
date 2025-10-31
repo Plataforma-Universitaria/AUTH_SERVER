@@ -45,34 +45,44 @@ public class AuthController {
             @RequestParam(required = false) String assistenteId,
             RedirectAttributes redirectAttributes) {
 
-        if (assistenteId != null && !assistenteId.isEmpty()) {
-            loginRequest.setAssistenteId(assistenteId);
-        }
+        PlatformAuthResponseDTO response = null;
 
-        PlatformAuthResponseDTO response = platformIntegrationService.authenticateWithPlatform(loginRequest)
-                .block();
-
-        if (response != null && response.getResponse() != null) {
-            String jwt = jwtService.generateToken(response.getResponse());
-
+        try {
             if (assistenteId != null && !assistenteId.isEmpty()) {
-                jwtStorage.put(assistenteId, jwt);
+                loginRequest.setAssistenteId(assistenteId);
             }
 
-            return "callback";
-        } else {
-            if(Objects.nonNull(response)) {
-                redirectAttributes.addFlashAttribute("error",
-                        response.getMessage().contains("authenticate")? "Credenciais incorretas!" : response.getMessage());
+            response = platformIntegrationService.authenticateWithPlatform(loginRequest)
+                    .block();
+
+            if (response != null && response.getResponse() != null) {
+                String jwt = jwtService.generateToken(response.getResponse());
+
+                if (assistenteId != null && !assistenteId.isEmpty()) {
+                    jwtStorage.put(assistenteId, jwt);
+                }
+
+                return "callback";
             }
 
+            String errorMessage = "Credenciais incorretas!";
+            if (response != null && response.getMessage() != null && !response.getMessage().isEmpty()) {
+                // Usa a mensagem da API, se não for a genérica "authenticate"
+                if (!response.getMessage().contains("authenticate")) {
+                    errorMessage = response.getMessage();
+                }
+            }
+            redirectAttributes.addFlashAttribute("error", errorMessage);
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Credenciais incorretas ou falha de comunicação.");
+        }
 
         if (assistenteId != null && !assistenteId.isEmpty()) {
             redirectAttributes.addAttribute("assistenteId", assistenteId);
         }
 
         return "redirect:/";
-    }
     }
 
     @GetMapping("/token")
