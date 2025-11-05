@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termos de Uso - Plataforma PIPA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1, h2 {
+            color: #1f1f1f;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 80px auto 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #0066cc;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #0052a3;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<a th:href="@{/}" class="back-button">&LeftAngleBracket;</a>
+<div class="container">
+    <h1>Termos de Uso - Plataforma PIPA</h1>
+    <p><strong>Última atualização:</strong> 05/11/2025</p>
+
+    <h2>1. Aceitação dos Termos</h2>
+    <p>Ao acessar e utilizar a <strong>Plataforma PIPA</strong> (doravante referida como "PIPA" ou "Plataforma"),
+        você concorda em cumprir estes Termos de Uso. Se não concordar
+        com os termos, não utilize a plataforma.
+    </p>
+
+    <h2>2. Definição do Serviço</h2>
+    <p>A <strong>Plataforma PIPA</strong> ("PIPA") é uma plataforma de integração que conecta os sistemas acadêmicos
+        das instituições de ensino parceiras a assistentes virtuais (chatbots). Ela permite que usuários autorizados
+        (como alunos, professores e gestores) consultem informações acadêmicas,
+        como horários de aulas, notas, faltas, e gerem documentos como declarações de frequência
+        e históricos acadêmicos, de acordo com as informações disponibilizadas pela instituição de ensino.</p>
+
+    <h2>3. Requisitos para Uso</h2>
+    <p>Para utilizar os serviços da PIPA, você deve ser um membro ativo (aluno, professor, etc.) de uma
+        instituição parceira. A autenticação é necessária e será realizada através do
+        <strong>Servidor de Autenticação (Auth Server)</strong> da PIPA, que verifica suas credenciais
+        junto à sua instituição de ensino.
+    </p>
+
+    <h2>4. Responsabilidade do Usuário</h2>
+    <p>Você é responsável por garantir que os dados fornecidos sejam verdadeiros e
+        por utilizar a plataforma e seus assistentes virtuais de forma adequada e legal.
+    </p>
+
+    <h2>5. Privacidade</h2>
+    <p>O uso da plataforma está sujeito à nossa <a th:href="@{/info/policy}">Política de Privacidade</a>,
+        que descreve como suas informações pessoais são coletadas e utilizadas.
+        A PIPA é projetada para minimizar o armazenamento de dados: a plataforma <strong>não armazena</strong>
+        dados pessoais sensíveis como nome, CPF, ou senhas. Ela apenas gerencia os dados de acesso
+        necessários para manter a conexão segura com a instituição, conforme a regra de negócio RN01
+        (Não armazenar dados de autenticação do usuário).</p>
+
+    <h2>6. Limitação de Responsabilidade</h2>
+    <p>A plataforma é fornecida "como está" e sem garantias de funcionamento contínuo.
+        Não nos responsabilizamos por danos decorrentes do uso ou da impossibilidade de usar o sistema,
+        incluindo eventuais falhas técnicas, interrupções ou manutenção programada.
+    </p>
+
+
+    <h2>7. Modificações no Serviço</h2>
+    <p>Reservamo-nos o direito de modificar, suspender ou descontinuar o serviço a qualquer momento,
+        com ou sem aviso prévio. O desenvolvimento e a manutenção da PIPA são realizados no âmbito
+        do curso de Bacharelado em Sistemas de Informação da Universidade Estadual de Goiás (UEG).
+        Mudanças podem ser realizadas a qualquer tempo, e você concorda que o serviço pode ser
+        alterado conforme necessário.</p>
+
+
+    <h2>8. Alterações nos Termos</h2>
+    <p>Podemos alterar estes Termos de Uso a qualquer momento. As mudanças entrarão em vigor após a
+        publicação neste site.
+    </p>
+
+    <h2>9. Cancelamento e Suspensão</h2>
+    <p>Podemos cancelar ou suspender seu acesso ao serviço se violar estes Termos ou conforme exigido por lei.
+    </p>
+
+    <h2>10. Lei Aplicável e Jurisdição</h2>
+    <p>Estes Termos de Uso são regidos pelas leis do Brasil. Disputas serão resolvidas nos tribunais de Goiás.
+    </p>
+
+    <h2>11. Contato</h2>
+    <p>Se tiver dúvidas sobre esta Política de Privacidade ou precisar de esclarecimentos sobre a coleta de dados e a proteção da sua privacidade, entre em contato pelo e-mail abaixo:</p>
+    <p>Feedback e dúvidas: <a href="mailto:pipacomunication@gmail.com">pipacomunication@gmail.com</a></p>
+</div>
+
+</body>
+</html>
