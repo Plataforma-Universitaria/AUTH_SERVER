@@ -15,9 +15,7 @@ RUN mvn dependency:go-offline
 COPY ./src ./src
   # compile the source code and package it in a jar file
 RUN mvn clean install -Dmaven.test.skip=true
-  #Stage 2
-  # set base image for second stage
-FROM amazoncorretto:21-jre
+FROM openjdk:21-jdk-slim
   # set deployment directory
 WORKDIR /app
   # copy over the built artifact from the maven image
