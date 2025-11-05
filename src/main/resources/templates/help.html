@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajuda - Login PIPA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h3 {
+            color: #1f1f1f;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+        }
+        p {
+            color: #333;
+        }
+        ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        code {
+            background-color: #eef;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #0066cc;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #0052a3;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<a th:href="@{/}" class="back-button">&LeftAngleBracket;</a>
+<div class="container">
+    <h3>Ajuda: Como faço para logar no PIPA?</h3>
+
+    <p>O PIPA é uma plataforma que se conecta aos sistemas da sua instituição de ensino. Para acessar suas informações acadêmicas pessoais (como notas, faltas ou horários), você precisa primeiro se autenticar.</p>
+
+    <p>O processo é simples e seguro, feito em duas etapas:</p>
+
+    <p><strong>1. No assistente virtual (chatbot):</strong></p>
+    <ul>
+        <li>Ao iniciar a conversa com o bot, ele verificará se você já possui uma sessão ativa.</li>
+        <li>Caso não esteja logado, o bot enviará uma <strong>mensagem com um link único</strong> para a página de autenticação.</li>
+    </ul>
+
+    <p><strong>2. Na página de login (Auth Server):</strong></p>
+    <p>Ao clicar no link, você será direcionado para a tela de login da plataforma. Siga estes passos:</p>
+
+    <ol>
+        <li><strong>Selecione sua "Instituição"</strong> (ex: <code>UEG</code>) na primeira lista.</li>
+        <li><strong>Selecione sua "Função"</strong> (também chamada de persona), como <code>Aluno</code> ou <code>Professor</code>.</li>
+        <li>Após selecionar ambos, os campos de login específicos da sua instituição irão aparecer (por exemplo, "CPF" e "Senha" para alunos da UEG).</li>
+        <li>Preencha suas credenciais. (Use os mesmos dados que você já utiliza para acessar o portal oficial da sua instituição).</li>
+        <li>Clique em "Login" (ou "ENTRAR").</li>
+    </ol>
+
+    <p><strong>Pronto!</strong> Após a confirmação, a página será atualizada e você pode retornar ao chatbot para fazer suas consultas de forma autenticada.</p>
+</div>
+
+</body>
+</html>

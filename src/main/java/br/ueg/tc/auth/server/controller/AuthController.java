@@ -5,6 +5,7 @@ import br.ueg.tc.auth.server.dto.PlatformAuthResponseDTO;
 import br.ueg.tc.auth.server.dto.PlatformLogoutResponseDTO;
 import br.ueg.tc.auth.server.service.JwtService;
 import br.ueg.tc.auth.server.service.PlatformIntegrationService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class AuthController {
 
+
     private final PlatformIntegrationService platformIntegrationService;
     @Autowired
     JwtService jwtService;
@@ -33,17 +35,29 @@ public class AuthController {
     @GetMapping("/")
     public String loginPage(
             @RequestParam(required = false) String assistenteId,
-            Model model) {
-        model.addAttribute("assistenteId", assistenteId);
+            Model model,
+            HttpSession session) {
 
+
+        if (assistenteId == null || assistenteId.isEmpty()) {
+            assistenteId = (String) session.getAttribute("assistenteId");
+        }
+        else {
+            session.setAttribute("assistenteId", assistenteId);
+        }
+
+        model.addAttribute("assistenteId", assistenteId);
         return "login";
     }
 
     @PostMapping("/login")
     public String processLogin(
+
             @ModelAttribute LoginRequestDTO loginRequest,
-            @RequestParam(required = false) String assistenteId,
+            HttpSession session,
             RedirectAttributes redirectAttributes) {
+
+        String assistenteId = (String) session.getAttribute("assistenteId");
 
         PlatformAuthResponseDTO response = null;
 
@@ -52,8 +66,7 @@ public class AuthController {
                 loginRequest.setAssistenteId(assistenteId);
             }
 
-            response = platformIntegrationService.authenticateWithPlatform(loginRequest)
-                    .block();
+            response = platformIntegrationService.authenticateWithPlatform(loginRequest).block();
 
             if (response != null && response.getResponse() != null) {
                 String jwt = jwtService.generateToken(response.getResponse());
@@ -62,12 +75,12 @@ public class AuthController {
                     jwtStorage.put(assistenteId, jwt);
                 }
 
+                session.removeAttribute("assistenteId");
                 return "callback";
             }
 
             String errorMessage = "Credenciais incorretas!";
             if (response != null && response.getMessage() != null && !response.getMessage().isEmpty()) {
-                // Usa a mensagem da API, se não for a genérica "authenticate"
                 if (!response.getMessage().contains("authenticate")) {
                     errorMessage = response.getMessage();
                 }
@@ -76,10 +89,6 @@ public class AuthController {
 
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Credenciais incorretas ou falha de comunicação.");
-        }
-
-        if (assistenteId != null && !assistenteId.isEmpty()) {
-            redirectAttributes.addAttribute("assistenteId", assistenteId);
         }
 
         return "redirect:/";
@@ -95,6 +104,7 @@ public class AuthController {
             return ResponseEntity.status(404).body("Token não encontrado para assistenteId: " + assistenteId);
         }
     }
+
     @PostMapping("/logout")
     @ResponseBody
     public ResponseEntity<String> logout(@RequestParam String assistenteId) {
