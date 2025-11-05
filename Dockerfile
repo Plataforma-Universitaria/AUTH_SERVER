@@ -17,7 +17,7 @@ COPY ./src ./src
 RUN mvn clean install -Dmaven.test.skip=true
   #Stage 2
   # set base image for second stage
-FROM amazoncorretto:21-slim
+FROM amazoncorretto:21-jre
   # set deployment directory
 WORKDIR /app
   # copy over the built artifact from the maven image
