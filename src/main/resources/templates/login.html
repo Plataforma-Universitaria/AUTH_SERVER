@@ -43,11 +43,7 @@
     <div class="mt-5 mx-auto max-w-sm w-full">
 
         <form class="bg-white overflow-hidden md-10 p-10 rounded-xl shadow-lg space-y-3" th:action="@{/login}" method="post">
-            <div class="flex justify-end pb-5 space-x-3">
-                <a th:href="@{/info/help}" class="text-sm text-gray-600 hover:text-gray-900 underline">Ajuda</a>
-                <a th:href="@{/info/terms}" class="text-sm text-gray-600 hover:text-gray-900 underline">Termos</a>
-                <a th:href="@{/info/policy}" class="text-sm text-gray-600 hover:text-gray-900 underline">Política</a>
-            </div>
+
             <div class="sm:mx-auto sm:w-full mt-5 sm:max-w-sm">
                 <img class="mx-auto h-40 w-50" th:src="@{/images/logo.png}" alt="logo">
             </div>
@@ -117,6 +113,11 @@
             </div>
 
         </form>
+        <div class="flex justify-center align-center pt-10 space-x-3">
+            <a th:href="@{/info/help}" class="text-sm text-gray-600 hover:text-gray-900 underline">Ajuda</a>
+            <a th:href="@{/info/terms}" class="text-sm text-gray-600 hover:text-gray-900 underline">Termos</a>
+            <a th:href="@{/info/policy}" class="text-sm text-gray-600 hover:text-gray-900 underline">Política</a>
+        </div>
     </div>
 </div>
 </body>
