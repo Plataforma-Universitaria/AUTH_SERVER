@@ -7,6 +7,7 @@ import br.ueg.tc.auth.server.service.JwtService;
 import br.ueg.tc.auth.server.service.PlatformIntegrationService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
 
@@ -37,12 +39,11 @@ public class AuthController {
             @RequestParam(required = false) String assistenteId,
             Model model,
             HttpSession session) {
-
+        log.info("loginPage ativado para chat id iniciado em " + assistenteId.substring(0, 4));
 
         if (assistenteId == null || assistenteId.isEmpty()) {
             assistenteId = (String) session.getAttribute("assistenteId");
-        }
-        else {
+        } else {
             session.setAttribute("assistenteId", assistenteId);
         }
 
@@ -108,12 +109,23 @@ public class AuthController {
     @PostMapping("/logout")
     @ResponseBody
     public ResponseEntity<String> logout(@RequestParam String assistenteId) {
-        String token = jwtStorage.get(assistenteId);
+        try{
+            String token = jwtStorage.get(assistenteId);
+
+        log.info("Efetuando logout para chat id iniciado em {}", assistenteId.substring(0, 4));
         PlatformLogoutResponseDTO platformLogoutResponseDTO = platformIntegrationService.logoutWithPlatform(token).block();
         String key = jwtStorage.remove(assistenteId);
         if (key != null) {
+            log.info("Retornou key");
             return ResponseEntity.ok(key);
+
         } else {
+            log.info("Retornou 404");
+            return ResponseEntity.status(404).body("Não encontrado para assistenteId: " + assistenteId);
+
+        }
+        }catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(404).body("Não encontrado para assistenteId: " + assistenteId);
         }
     }
