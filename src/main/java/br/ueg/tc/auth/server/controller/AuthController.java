@@ -39,13 +39,14 @@ public class AuthController {
             @RequestParam(required = false) String assistenteId,
             Model model,
             HttpSession session) {
-        log.info("loginPage ativado para chat id iniciado em " + assistenteId.substring(0, 4));
 
         if (assistenteId == null || assistenteId.isEmpty()) {
             assistenteId = (String) session.getAttribute("assistenteId");
         } else {
             session.setAttribute("assistenteId", assistenteId);
         }
+
+        log.info("loginPage ativado para chat id iniciado em " + assistenteId.substring(0, 4));
 
         model.addAttribute("assistenteId", assistenteId);
         return "login";
