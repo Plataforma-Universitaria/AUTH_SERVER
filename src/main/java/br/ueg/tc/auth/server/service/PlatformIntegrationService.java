@@ -35,13 +35,21 @@ public class PlatformIntegrationService {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(loginRequest)
                 .retrieve()
+                .onStatus(status -> status.isError(), response -> response.bodyToMono(String.class)
+                        .flatMap(errorBody -> Mono.error(new RuntimeException(errorBody))))
                 .bodyToMono(PlatformAuthResponseDTO.class)
-                .onErrorResume(e -> Mono.just(
-                    PlatformAuthResponseDTO.builder()
-                        .success(false)
-                        .message("Erro ao comunicar com a plataforma: " + e.getMessage())
-                        .build()
-                ));
+                .onErrorResume(e -> {
+                    String message = e.getMessage();
+                    if (message == null || message.isEmpty()) {
+                        message = "Erro desconhecido na plataforma";
+                    }
+                    return Mono.just(
+                        PlatformAuthResponseDTO.builder()
+                            .success(false)
+                            .message(message)
+                            .build()
+                    );
+                });
     }
     /**
      * Envia o jwt do usuário para a plataforma principal e recebe o UUID
