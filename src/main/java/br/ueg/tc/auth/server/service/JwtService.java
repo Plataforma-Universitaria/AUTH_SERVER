@@ -32,12 +32,13 @@ public class JwtService {
         this.privateKey = loadPrivateKey(privateKeyRaw);
     }
 
-    public String generateToken(String clientId) {
+    public String generateToken(String clientId, String institutionId) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expirationInSeconds * 1000);
 
         return Jwts.builder()
                 .subject(clientId)
+                .claim("institution_id", institutionId)
                 .issuedAt(now)
                 .issuer(issuer)
                 .expiration(expiry)

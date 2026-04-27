@@ -71,7 +71,7 @@ public class AuthController {
             response = platformIntegrationService.authenticateWithPlatform(loginRequest).block();
 
             if (response != null && response.getResponse() != null) {
-                String jwt = jwtService.generateToken(response.getResponse());
+                String jwt = jwtService.generateToken(response.getResponse(), loginRequest.getInstitutionName());
 
                 if (assistenteId != null && !assistenteId.isEmpty()) {
                     jwtStorage.put(assistenteId, jwt);
