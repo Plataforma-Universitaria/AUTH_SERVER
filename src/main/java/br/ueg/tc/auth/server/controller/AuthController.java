@@ -78,6 +78,11 @@ public class AuthController {
                 }
 
                 session.removeAttribute("assistenteId");
+
+                if (botCallbackUrl != null && !botCallbackUrl.isEmpty() && assistenteId != null && !assistenteId.isEmpty()) {
+                    return "redirect:" + botCallbackUrl + "?jwt=" + jwt + "&assistenteId=" + assistenteId;
+                }
+
                 return "callback";
             }
 

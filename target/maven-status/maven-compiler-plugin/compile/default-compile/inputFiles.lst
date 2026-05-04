@@ -1,0 +1,15 @@
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\AuthServerApplication.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\config\JwtProperties.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\config\WebClientConfig.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\controller\AuthController.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\controller\InfoController.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\controller\InstitutionController.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\dto\InstitutionDTO.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\dto\LoginDataDTO.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\dto\LoginRequestDTO.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\dto\PlatformAuthResponseDTO.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\dto\PlatformLogoutResponseDTO.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\dto\SalutationPhraseDTO.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\service\InstitutionService.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\service\JwtService.java
+C:\workspace\PIPA\AUTH_SERVER\src\main\java\br\ueg\tc\auth\server\service\PlatformIntegrationService.java
