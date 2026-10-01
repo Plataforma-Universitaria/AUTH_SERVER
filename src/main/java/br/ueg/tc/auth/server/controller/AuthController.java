@@ -2,7 +2,6 @@ package br.ueg.tc.auth.server.controller;
 
 import br.ueg.tc.auth.server.dto.LoginRequestDTO;
 import br.ueg.tc.auth.server.dto.PlatformAuthResponseDTO;
-import br.ueg.tc.auth.server.dto.PlatformLogoutResponseDTO;
 import br.ueg.tc.auth.server.service.JwtService;
 import br.ueg.tc.auth.server.service.PlatformIntegrationService;
 import jakarta.servlet.http.HttpSession;
@@ -16,8 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,6 +31,9 @@ public class AuthController {
 
     @Value("${bot.callback.url}")
     private String botCallbackUrl;
+
+    @Value("${AUTH_MANAGEMENT_KEY:}")
+    private String managementKey;
 
     private ConcurrentHashMap<String, String> jwtStorage = new ConcurrentHashMap<>();
 
@@ -46,7 +49,7 @@ public class AuthController {
             session.setAttribute("assistenteId", assistenteId);
         }
 
-        log.info("loginPage ativado para chat id iniciado em " + assistenteId.substring(0, 4));
+        log.info("Página de login iniciada");
 
         model.addAttribute("assistenteId", assistenteId);
         return "login";
@@ -103,7 +106,12 @@ public class AuthController {
 
     @GetMapping("/token")
     @ResponseBody
-    public ResponseEntity<String> getToken(@RequestParam String assistenteId) {
+    public ResponseEntity<String> getToken(
+            @RequestParam String assistenteId,
+            @RequestHeader(value = "x-api-key", required = false) String apiKey) {
+        if (!hasManagementAccess(apiKey)) {
+            return ResponseEntity.status(401).body("Credencial administrativa inválida");
+        }
         String token = jwtStorage.get(assistenteId);
         if (token != null) {
             return ResponseEntity.ok(token);
@@ -114,25 +122,32 @@ public class AuthController {
 
     @PostMapping("/logout")
     @ResponseBody
-    public ResponseEntity<String> logout(@RequestParam String assistenteId) {
-        try{
-            String token = jwtStorage.get(assistenteId);
-
-        log.info("Efetuando logout para chat id iniciado em {}", assistenteId.substring(0, 4));
-        PlatformLogoutResponseDTO platformLogoutResponseDTO = platformIntegrationService.logoutWithPlatform(token).block();
-        String key = jwtStorage.remove(assistenteId);
-        if (key != null) {
-            log.info("Retornou key");
-            return ResponseEntity.ok(key);
-
-        } else {
-            log.info("Retornou 404");
-            return ResponseEntity.status(404).body("Não encontrado para assistenteId: " + assistenteId);
-
+    public ResponseEntity<String> logout(
+            @RequestParam String assistenteId,
+            @RequestHeader(value = "x-api-key", required = false) String apiKey) {
+        if (!hasManagementAccess(apiKey)) {
+            return ResponseEntity.status(401).body("Credencial administrativa inválida");
         }
-        }catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(404).body("Não encontrado para assistenteId: " + assistenteId);
+        String token = jwtStorage.get(assistenteId);
+        if (token == null) {
+            return ResponseEntity.status(404).body("Sessão não encontrada");
         }
+        try {
+            platformIntegrationService.logoutWithPlatform(token).block();
+            jwtStorage.remove(assistenteId);
+            return ResponseEntity.ok("Logout concluído");
+        } catch (Exception e) {
+            log.error("Falha de comunicação no logout institucional");
+            return ResponseEntity.status(502).body("Não foi possível concluir o logout");
+        }
+    }
+
+    private boolean hasManagementAccess(String candidate) {
+        if (managementKey == null || managementKey.length() < 32 || candidate == null) {
+            return false;
+        }
+        byte[] expected = managementKey.getBytes(StandardCharsets.UTF_8);
+        byte[] actual = candidate.getBytes(StandardCharsets.UTF_8);
+        return MessageDigest.isEqual(expected, actual);
     }
 }

@@ -42,7 +42,7 @@
                     class="text-blue-600 hover:text-blue-800 underline">e-mail</a></h5>
     <div class="mt-5 mx-auto max-w-sm w-full">
 
-        <form class="bg-white overflow-hidden md-10 p-10 rounded-xl shadow-lg space-y-3" th:action="@{/login}" method="post">
+        <form id="login-form" class="bg-white overflow-hidden md-10 p-10 rounded-xl shadow-lg space-y-3" th:action="@{/login}" method="post">
 
             <div class="sm:mx-auto sm:w-full mt-5 sm:max-w-sm">
                 <img class="mx-auto h-40 w-50" th:src="@{/images/logo.png}" alt="logo">
@@ -106,10 +106,10 @@
             <input type="hidden" id="assistenteId" name="assistenteId" th:value="${assistenteId}"/>
 
             <div>
-                <input class="bg-blue-800 px-3 py-1.5 text-sm mt-8 font-semibold leading-6 text-white flex w-full
-                justify-center rounded-md  shadow-sm ring-1 ring-inset hover:bg-blue-900 focus-visible:outline
-                focus-visible:outline-offset-2 focus-visible:outline-blue-900"
-                       type="submit" value="Entrar">
+                <button id="login-submit" class="bg-blue-800 px-3 py-1.5 text-sm mt-8 font-semibold leading-6 text-white flex w-full
+                justify-center rounded-md shadow-sm ring-1 ring-inset hover:bg-blue-900 focus-visible:outline
+                focus-visible:outline-offset-2 focus-visible:outline-blue-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                        type="submit">Entrar</button>
             </div>
 
         </form>
@@ -123,6 +123,28 @@
 </body>
 
 <script>
+    const loginForm = document.getElementById("login-form");
+    const loginSubmit = document.getElementById("login-submit");
+    let isSubmitting = false;
+
+    loginForm.addEventListener("submit", function (event) {
+        if (isSubmitting) {
+            event.preventDefault();
+            return;
+        }
+        isSubmitting = true;
+        loginSubmit.disabled = true;
+        loginSubmit.textContent = "Entrando...";
+        loginForm.setAttribute("aria-busy", "true");
+    });
+
+    window.addEventListener("pageshow", function () {
+        isSubmitting = false;
+        loginSubmit.disabled = false;
+        loginSubmit.textContent = "Entrar";
+        loginForm.removeAttribute("aria-busy");
+    });
+
     function togglePassword() {
         const passwordField = document.getElementById("password");
         const toggleIcon = document.getElementById("toggle-icon");
