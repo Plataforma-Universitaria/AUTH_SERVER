@@ -1,22 +1,14 @@
-#Stage 1
-# initialize build and set base image for first stage
-FROM maven:3.9.6-amazoncorretto-21 as stage1
-  # speed up Maven JVM a bit
-ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
-  # set working directory
-WORKDIR /app/build
-  # copy just pom.xml
+# syntax=docker/dockerfile:1
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /build
 COPY pom.xml .
-  # go-offline using the pom.xml
-RUN mvn dependency:go-offline
+COPY src ./src
+RUN --mount=type=cache,target=/root/.m2 mvn -B package -Dmaven.test.skip=true
 
-  # copy your other files
-COPY ./src ./src
-  # compile the source code and package it in a jar file
-RUN mvn clean install -Dmaven.test.skip=true
-FROM eclipse-temurin:21-jdk-jammy
-  # set deployment directory
+FROM eclipse-temurin:21-jre-jammy
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
-  # copy over the built artifact from the maven image
-COPY --from=stage1 /app/build/target/*.jar /app/app.jar
-CMD java -jar /app/app.jar
+COPY --from=build /build/target/authserver-0.0.1-SNAPSHOT.jar /app/app.jar
+USER 10001:10001
+EXPOSE 9090
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
